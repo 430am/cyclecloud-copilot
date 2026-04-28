@@ -172,10 +172,12 @@ sudo tail -n 200 /var/log/cloud-init-output.log
 
 - Key Vault public network access is disabled.
 - Key Vault access uses RBAC and private endpoint integration.
+- Key Vault network ACL bypass is set to `AzureServices` to allow Terraform secret operations during provisioning.
 - Sensitive key material is marked sensitive in outputs.
 - VM is provisioned without public IP by default.
 - SSH access is intended through Azure Bastion tunneling.
 - Storage account access is private endpoint only.
+- Storage accounts keep shared key auth enabled for provider data-plane readiness checks during deployment.
 
 ## Diagnostics Coverage
 

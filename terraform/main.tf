@@ -318,7 +318,7 @@ module "key_vault" {
   public_network_access_enabled = false
   network_acls = {
     default_action = "Deny"
-    bypass         = "None"
+    bypass         = "AzureServices"
   }
 
   role_assignments = {
@@ -370,6 +370,7 @@ resource "azurerm_storage_account" "locker" {
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   account_kind                    = "StorageV2"
+  shared_access_key_enabled       = true
   min_tls_version                 = "TLS1_2"
   allow_nested_items_to_be_public = false
   public_network_access_enabled   = false
@@ -383,6 +384,7 @@ resource "azurerm_storage_account" "bootdiag" {
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   account_kind                    = "StorageV2"
+  shared_access_key_enabled       = true
   min_tls_version                 = "TLS1_2"
   allow_nested_items_to_be_public = false
   public_network_access_enabled   = false
@@ -505,6 +507,16 @@ resource "azurerm_netapp_volume" "cyclecloud" {
   protocols           = ["NFSv4.1"]
   storage_quota_in_gb = var.anf_volume_quota_gb
   security_style      = "unix"
+
+  export_policy_rule {
+    rule_index        = 1
+    allowed_clients   = ["0.0.0.0/0"]
+    protocols_enabled = ["NFSv4.1"]
+    unix_read_only    = false
+    unix_read_write   = true
+    root_access_enabled = true
+  }
+
   tags                = local.common_tags
 }
 
