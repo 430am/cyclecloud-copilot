@@ -7,9 +7,6 @@ packages:
   - curl
   - gpg
   - jq
-  - nfs-common
-  - pipx
-  - python3-pip
   - unzip
 
 runcmd:
@@ -18,10 +15,5 @@ runcmd:
   - [bash, -c, "echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main' > /etc/apt/sources.list.d/microsoft-prod.list"]
   - [bash, -c, "apt-get update"]
   - [bash, -c, "DEBIAN_FRONTEND=noninteractive apt-get install -y ${cyclecloud_package_name}"]
-  - [bash, -c, "pipx ensurepath"]
-  - [bash, -c, "pipx install cyclecloud || pipx upgrade cyclecloud"]
-  - [bash, -c, "mkdir -p /mnt/cyclecloud"]
-  - [bash, -c, "grep -q '/mnt/cyclecloud' /etc/fstab || echo '${anf_mount_target}:/${anf_volume_path} /mnt/cyclecloud nfs4 rw,hard,timeo=600,retrans=2,_netdev,vers=4.1 0 0' >> /etc/fstab"]
-  - [bash, -c, "mount -a || true"]
 
 final_message: "CycleCloud bootstrap completed."
