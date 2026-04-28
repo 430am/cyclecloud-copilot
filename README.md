@@ -68,18 +68,29 @@ The profile file at `terraform/environments/us-hpc.tfvars` includes:
 Use a committed example file and a local untracked runtime file:
 
 - Commit: `terraform/environments/us-hpc.example.tfvars` with placeholder values only.
-- Keep local only: `terraform/environments/us-hpc.tfvars` with real values.
+- Keep local only: `terraform/environments/us-hpc.tfvars` with real credentials.
 
 Recommended flow:
 
 ```bash
 cp terraform/environments/us-hpc.example.tfvars terraform/environments/us-hpc.tfvars
-# edit terraform/environments/us-hpc.tfvars with environment-specific values
+# edit terraform/environments/us-hpc.tfvars with your actual credentials and values
 cd terraform
 terraform plan -var-file="environments/us-hpc.tfvars"
 ```
 
-The repository `.gitignore` is configured to avoid committing `.tfvars` and other common secret-bearing files.
+**Security:**
+
+- The repository `.gitignore` is configured to prevent committing `.tfvars` files.
+- Service principal secrets (`ARM_CLIENT_SECRET`) must never be committed.
+- Credentials can also be provided via environment variables instead of tfvars:
+  ```bash
+  export ARM_SUBSCRIPTION_ID="<subscription-id>"
+  export ARM_TENANT_ID="<tenant-id>"
+  export ARM_CLIENT_ID="<client-id>"
+  export ARM_CLIENT_SECRET="<client-secret>"
+  ```
+- Environment variables take precedence over tfvars when both are set.
 
 ## Prerequisites
 
@@ -112,21 +123,37 @@ terraform apply tfplan
 
 ## Key Inputs to Customize
 
+**Azure Authentication:**
+- `ARM_SUBSCRIPTION_ID`
+- `ARM_TENANT_ID`
+- `ARM_CLIENT_ID`
+- `ARM_CLIENT_SECRET`
+
+**Naming and Location:**
 - `resource_group_name`
 - `location`
+- `name_prefix` and related resource names
+
+**Network:**
 - `vnet_address_space` (default `10.50.0.0/16`)
 - `cluster_subnet_cidr` (default `/23`)
-- `key_vault_name`
+- subnet CIDRs
+
+**Compute:**
 - `cyclecloud_vm_name`
 - `cyclecloud_vm_size`
 - `cyclecloud_vm_zone`
+
+**Storage and Monitoring:**
 - `anf_*` sizing and naming variables
 - `locker_storage_account_name`
 - `bootdiag_storage_account_name`
 - `log_analytics_workspace_name`
+
+**Identity and Access:**
+- `key_vault_name`
 - `cyclecloud_uami_name`
 - `cyclecloud_custom_role_name`
-- subnet CIDRs
 
 ## Post-Deploy
 

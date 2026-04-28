@@ -51,3 +51,12 @@ tags = {
   naming      = "rt-env-workload-region-instance"
   managed_by  = "terraform"
 }
+
+# Service principal credentials for Terraform to authenticate with Azure.
+# Set these values or provide via environment variables (ARM_SUBSCRIPTION_ID, etc.).
+# WARNING: Do not commit real credentials to version control.
+# This example file is committed; the runtime file (us-hpc.tfvars) is in .gitignore.
+ARM_SUBSCRIPTION_ID = "<subscription-id>"
+ARM_CLIENT_ID       = "<service-principal-client-id>"
+ARM_CLIENT_SECRET   = "<service-principal-client-secret>"
+ARM_TENANT_ID       = "<azure-tenant-id>"
